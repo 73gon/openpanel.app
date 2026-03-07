@@ -138,9 +138,10 @@
 .logo-anim-c rect {
   transform-box: fill-box;
   transform-origin: center;
-}
-.logo-anim-c rect {
-  animation: 4s ease-in-out infinite both;
+  animation-duration: 3.3s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
 }
 .logo-anim-c rect:nth-child(1) {
   animation-name: logoDrawV;
