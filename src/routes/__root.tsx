@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-router'
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { HugeiconsIcon } from '@hugeicons/react'
+import { Analytics } from '@vercel/analytics/react'
 import {
   Menu01Icon,
   Cancel01Icon,
@@ -50,6 +51,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         {children}
         <Scripts />
+        <Analytics />
       </body>
     </html>
   )
