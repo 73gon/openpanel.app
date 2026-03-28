@@ -16,6 +16,8 @@ import {
   Database02Icon,
   SquareLockIcon,
   Download01Icon,
+  ArrowUp01Icon,
+  ComputerIcon,
 } from '@hugeicons/core-free-icons'
 
 export const Route = createFileRoute('/features')({ component: FeaturesPage })
@@ -112,10 +114,22 @@ const sections = [
     title: 'Deployment',
     features: [
       {
+        icon: ArrowUp01Icon,
+        title: 'One-Click Self-Update',
+        description:
+          'Update from the admin panel with a single click. The server downloads the latest release, verifies the SHA-256 checksum, swaps the binary, and restarts — no terminal needed.',
+      },
+      {
+        icon: ComputerIcon,
+        title: 'Pre-Built Binaries',
+        description:
+          'Download a ready-to-run binary for Linux x64, Linux ARM64, Windows x64, or macOS ARM64. No Rust toolchain or Node.js required — just download and start.',
+      },
+      {
         icon: Download01Icon,
         title: 'Docker Ready',
         description:
-          'Single multi-stage Docker image. Mount your library read-only, set one volume for data, and run.',
+          'Single multi-stage Docker image. Mount your library read-only, set one volume for data, and run. Or skip Docker entirely with a native binary.',
       },
       {
         icon: SmartPhone01Icon,

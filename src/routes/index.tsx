@@ -7,11 +7,11 @@ import {
   UserMultiple02Icon,
   CloudIcon,
   SmartPhone01Icon,
-  ShieldKeyIcon,
   ArrowRight01Icon,
   Bookmark01Icon,
   GridViewIcon,
   PaintBrushIcon,
+  ArrowUp01Icon,
 } from '@hugeicons/core-free-icons'
 
 export const Route = createFileRoute('/')({ component: HomePage })
@@ -84,13 +84,13 @@ const features = [
     icon: SmartPhone01Icon,
     title: 'PWA — Install Anywhere',
     description:
-      'Install as a native app on iOS, Android, or desktop. Offline-capable with service worker caching.',
+      'Install as a native app on iOS, Android, or desktop. Download chapters for offline reading.',
   },
   {
-    icon: ShieldKeyIcon,
-    title: 'Docker Ready',
+    icon: ArrowUp01Icon,
+    title: 'One-Click Updates',
     description:
-      "Single multi-stage Docker image. docker compose up and you're running.",
+      'Update from the admin panel. Downloads the latest binary, verifies checksums, and restarts automatically.',
   },
 ]
 
@@ -374,7 +374,7 @@ function HomePage() {
 
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground md:text-xl">
             A self-hosted manga &amp; comic book reader. Like Jellyfin, but for
-            CBZ files. Zero extraction, multi-user, installable as a PWA.
+            CBZ files. Pre-built binaries, multi-user, installable as a PWA.
           </p>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
@@ -479,7 +479,7 @@ function HomePage() {
             Ready to try it?
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Self-host in minutes with Docker or build from source.
+            Self-host in minutes with Docker or a single binary.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link

@@ -44,11 +44,11 @@ const faqs = [
   },
   {
     q: 'What are the system requirements?',
-    a: 'OpenPanel is lightweight. The Rust backend uses minimal RAM (~30-50 MB idle). Docker requires Docker Engine 20+ or Docker Desktop. For native builds: Rust 1.75+ and Node.js 20+. Any modern x86_64 or ARM64 system works.',
+    a: 'OpenPanel is lightweight. The Rust backend uses minimal RAM (~30-50 MB idle). Docker requires Docker Engine 20+ or Docker Desktop. Pre-built binaries are available for Linux x64, Linux ARM64, Windows x64, and macOS ARM64 — no Rust or Node.js needed. If building from source: Rust 1.75+ and Node.js 20+. Any modern x86_64 or ARM64 system works.',
   },
   {
     q: 'How do I update OpenPanel?',
-    a: 'For Docker: run "docker compose pull && docker compose up -d". For native builds: git pull, rebuild frontend and backend, restart the service. Admin users can also trigger updates from the admin panel.',
+    a: 'The easiest way is the built-in self-update: open Admin → Settings → Check for Updates → Update Now. The server downloads the correct binary for your platform, verifies the SHA-256 checksum, swaps the files, and restarts automatically. For Docker: run "docker compose pull && docker compose up -d". You can also manually download new binaries from GitHub Releases.',
   },
   {
     q: 'Does OpenPanel support reading right-to-left (manga style)?',

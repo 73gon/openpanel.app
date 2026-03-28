@@ -307,7 +307,21 @@ function DocsPage() {
             {/* ------------------------------------------------------------ */}
             <Section id="quick-start" title="Quick Start">
               <p>
-                The fastest way to get running is Docker Compose. Clone the
+                The fastest way to get running is with a{' '}
+                <strong className="text-foreground">pre-built binary</strong>.
+                Download the latest release for your platform from{' '}
+                <a
+                  href="https://github.com/73gon/openpanel/releases/latest"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground underline underline-offset-2"
+                >
+                  GitHub Releases
+                </a>
+                , extract, and run. No Rust toolchain or Node.js required.
+              </p>
+              <p>
+                Alternatively, use <strong className="text-foreground">Docker Compose</strong>. Clone the
                 repository and start:
               </p>
               <Pre title="Terminal">{`git clone https://github.com/73gon/openpanel.git
@@ -445,16 +459,49 @@ volumes:
 
             {/* ------------------------------------------------------------ */}
             <Section id="linux-install" title="Linux Installation">
+              <h3 className="text-lg font-semibold text-foreground">
+                Option 1: Pre-built Binary (recommended)
+              </h3>
               <p>
-                Build and run natively without Docker. You'll need{' '}
+                Download the latest release for your architecture from{' '}
+                <a
+                  href="https://github.com/73gon/openpanel/releases/latest"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground underline underline-offset-2"
+                >
+                  GitHub Releases
+                </a>
+                . No build tools required.
+              </p>
+              <Pre title="Terminal">{`# x86_64
+curl -LO https://github.com/73gon/openpanel/releases/latest/download/openpanel-x86_64-unknown-linux-gnu.tar.gz
+tar xzf openpanel-x86_64-unknown-linux-gnu.tar.gz
+
+# ARM64 (Raspberry Pi, Oracle Cloud, etc.)
+curl -LO https://github.com/73gon/openpanel/releases/latest/download/openpanel-aarch64-unknown-linux-gnu.tar.gz
+tar xzf openpanel-aarch64-unknown-linux-gnu.tar.gz`}</Pre>
+              <p>
+                The archive contains the server binary and the pre-built UI.
+                Run the server:
+              </p>
+              <Pre title="Terminal">{`OPENPANEL_DATA_DIR=/var/lib/openpanel \\
+OPENPANEL_PORT=3001 \\
+./openpanel-server`}</Pre>
+
+              <h3 className="mt-8 text-lg font-semibold text-foreground">
+                Option 2: Build from Source
+              </h3>
+              <p>
+                Build natively without Docker. You'll need{' '}
                 <strong className="text-foreground">Rust 1.75+</strong> and{' '}
                 <strong className="text-foreground">Node.js 20+</strong> (or
                 Bun).
               </p>
 
-              <h3 className="mt-6 text-lg font-semibold text-foreground">
+              <h4 className="mt-4 font-semibold text-foreground">
                 Build the frontend
-              </h3>
+              </h4>
               <Pre title="Terminal">{`cd ui
 npm install
 npm run build`}</Pre>
@@ -463,15 +510,13 @@ npm run build`}</Pre>
                 backend serves these files automatically.
               </p>
 
-              <h3 className="mt-6 text-lg font-semibold text-foreground">
+              <h4 className="mt-4 font-semibold text-foreground">
                 Build the backend
-              </h3>
+              </h4>
               <Pre title="Terminal">{`cd server
 cargo build --release`}</Pre>
 
-              <h3 className="mt-6 text-lg font-semibold text-foreground">
-                Run
-              </h3>
+              <h4 className="mt-4 font-semibold text-foreground">Run</h4>
               <p>
                 Set environment variables for the data directory and port, then
                 start the server:
@@ -485,7 +530,7 @@ OPENPANEL_PORT=3001 \\
                 ensure the running user has write permissions.
               </p>
 
-              <h3 className="mt-6 text-lg font-semibold text-foreground">
+              <h3 className="mt-8 text-lg font-semibold text-foreground">
                 systemd service (auto-start on boot)
               </h3>
               <p>Create a service file so OpenPanel starts automatically:</p>
@@ -496,8 +541,8 @@ After=network.target
 [Service]
 Type=simple
 User=openpanel
-WorkingDirectory=/opt/openpanel/server
-ExecStart=/opt/openpanel/server/target/release/openpanel-server
+WorkingDirectory=/opt/openpanel
+ExecStart=/opt/openpanel/openpanel-server
 Environment=OPENPANEL_PORT=3001
 Environment=OPENPANEL_DATA_DIR=/var/lib/openpanel
 Restart=on-failure
@@ -508,12 +553,42 @@ WantedBy=multi-user.target`}</Pre>
               <p>Enable and start the service:</p>
               <Pre title="Terminal">{`sudo systemctl daemon-reload
 sudo systemctl enable --now openpanel`}</Pre>
+              <p>
+                The self-update feature works with systemd: the server replaces its own binary
+                and exits, then systemd's <Code>Restart=on-failure</Code> brings it back on the new version.
+              </p>
             </Section>
 
             {/* ------------------------------------------------------------ */}
             <Section id="windows-install" title="Windows Installation">
               <h3 className="text-lg font-semibold text-foreground">
-                Option 1: Docker Desktop
+                Option 1: Pre-built Binary (recommended)
+              </h3>
+              <p>
+                Download the latest Windows release from{' '}
+                <a
+                  href="https://github.com/73gon/openpanel/releases/latest"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground underline underline-offset-2"
+                >
+                  GitHub Releases
+                </a>
+                . No Rust, Node.js, or Visual Studio Build Tools required.
+              </p>
+              <Pre title="PowerShell">{`# Download and extract
+Invoke-WebRequest -Uri "https://github.com/73gon/openpanel/releases/latest/download/openpanel-x86_64-pc-windows-msvc.zip" -OutFile openpanel.zip
+Expand-Archive openpanel.zip -DestinationPath C:\\openpanel`}</Pre>
+              <p>
+                The archive contains <Code>openpanel-server.exe</Code> and a <Code>dist/</Code> folder
+                with the pre-built UI. Run the server:
+              </p>
+              <Pre title="PowerShell">{`$env:OPENPANEL_DATA_DIR="C:\\ProgramData\\openpanel"
+$env:OPENPANEL_PORT="3001"
+C:\\openpanel\\openpanel-server.exe`}</Pre>
+
+              <h3 className="mt-8 text-lg font-semibold text-foreground">
+                Option 2: Docker Desktop
               </h3>
               <p>
                 Install{' '}
@@ -550,7 +625,7 @@ volumes:
               <Pre title="PowerShell">{`docker compose up -d`}</Pre>
 
               <h3 className="mt-8 text-lg font-semibold text-foreground">
-                Option 2: Build from Source
+                Option 3: Build from Source
               </h3>
               <p>
                 You'll need{' '}
@@ -589,11 +664,6 @@ cargo build --release`}</Pre>
               <Pre title="PowerShell">{`$env:OPENPANEL_DATA_DIR="C:\\ProgramData\\openpanel"
 $env:OPENPANEL_PORT="3001"
 .\\target\\release\\openpanel-server.exe`}</Pre>
-              <p>
-                <Code>{'C:\\ProgramData\\openpanel'}</Code> is a good location
-                for the data directory on Windows. Ensure it exists before
-                starting.
-              </p>
 
               <h4 className="mt-4 font-semibold text-foreground">
                 Windows Service (auto-start on boot)
@@ -612,15 +682,17 @@ $env:OPENPANEL_PORT="3001"
               </p>
               <Pre title="PowerShell">{`winget install nssm`}</Pre>
               <p>Register and configure the service:</p>
-              <Pre title="PowerShell">{`nssm install OpenPanel "C:\\openpanel\\server\\target\\release\\openpanel-server.exe"
-nssm set OpenPanel AppDirectory "C:\\openpanel\\server"
+              <Pre title="PowerShell">{`nssm install OpenPanel "C:\\openpanel\\openpanel-server.exe"
+nssm set OpenPanel AppDirectory "C:\\openpanel"
 nssm set OpenPanel AppEnvironmentExtra OPENPANEL_PORT=3001 OPENPANEL_DATA_DIR=C:\\ProgramData\\openpanel`}</Pre>
               <p>Start the service:</p>
               <Pre title="PowerShell">{`nssm start OpenPanel`}</Pre>
               <p>
                 Manage with <Code>nssm stop OpenPanel</Code>,{' '}
                 <Code>nssm restart OpenPanel</Code>, or through the Windows
-                Services panel (<Code>services.msc</Code>).
+                Services panel (<Code>services.msc</Code>). The self-update
+                feature works with NSSM: the server replaces its own binary and
+                exits, then NSSM restarts it on the new version.
               </p>
             </Section>
 
@@ -754,12 +826,55 @@ OPENPANEL_LOG_LEVEL=info`}</Pre>
 
             {/* ------------------------------------------------------------ */}
             <Section id="updating" title="Updating">
-              <h3 className="text-lg font-semibold text-foreground">Docker</h3>
+              <h3 className="text-lg font-semibold text-foreground">
+                Self-Update (recommended)
+              </h3>
+              <p>
+                The easiest way to update. Open the{' '}
+                <strong className="text-foreground">Admin Panel → Settings</strong>{' '}
+                and click <strong className="text-foreground">Check for Updates</strong>.
+                If a new version is available, click{' '}
+                <strong className="text-foreground">Update Now</strong>. The server will:
+              </p>
+              <ol className="list-inside list-decimal space-y-2">
+                <li>Download the correct binary for your platform from GitHub Releases</li>
+                <li>Verify the SHA-256 checksum</li>
+                <li>Swap the old binary (renamed to <Code>.old</Code>) with the new one</li>
+                <li>Replace the UI files</li>
+                <li>Exit — your service manager (systemd / NSSM) restarts it automatically</li>
+              </ol>
+              <p>
+                On next startup, old <Code>.old</Code> files are cleaned up automatically.
+                The entire process takes seconds and requires no terminal access.
+              </p>
+
+              <h3 className="mt-6 text-lg font-semibold text-foreground">Docker</h3>
               <Pre title="Terminal">{`docker compose pull
 docker compose up -d`}</Pre>
 
               <h3 className="mt-6 text-lg font-semibold text-foreground">
-                Linux (native)
+                Linux (manual)
+              </h3>
+              <p>
+                If you prefer manual updates, download the latest binary and replace the old one:
+              </p>
+              <Pre title="Terminal">{`curl -LO https://github.com/73gon/openpanel/releases/latest/download/openpanel-x86_64-unknown-linux-gnu.tar.gz
+tar xzf openpanel-x86_64-unknown-linux-gnu.tar.gz
+sudo systemctl stop openpanel
+cp openpanel-server /opt/openpanel/openpanel-server
+cp -r dist/ /opt/openpanel/dist/
+sudo systemctl start openpanel`}</Pre>
+
+              <h3 className="mt-6 text-lg font-semibold text-foreground">
+                Windows (manual)
+              </h3>
+              <Pre title="PowerShell">{`nssm stop OpenPanel
+Invoke-WebRequest -Uri "https://github.com/73gon/openpanel/releases/latest/download/openpanel-x86_64-pc-windows-msvc.zip" -OutFile openpanel.zip
+Expand-Archive -Force openpanel.zip -DestinationPath C:\\openpanel
+nssm start OpenPanel`}</Pre>
+
+              <h3 className="mt-6 text-lg font-semibold text-foreground">
+                Build from source (manual)
               </h3>
               <p>
                 Pull the latest code, rebuild both frontend and backend, then
@@ -769,23 +884,6 @@ docker compose up -d`}</Pre>
 cd ui && npm ci && npm run build && cd ..
 cd server && cargo build --release && cd ..
 sudo systemctl restart openpanel`}</Pre>
-
-              <h3 className="mt-6 text-lg font-semibold text-foreground">
-                Windows (native)
-              </h3>
-              <Pre title="PowerShell">{`git pull
-cd ui; npm ci; npm run build; cd ..
-cd server; cargo build --release; cd ..
-nssm restart OpenPanel`}</Pre>
-
-              <h3 className="mt-6 text-lg font-semibold text-foreground">
-                In-app update
-              </h3>
-              <p>
-                Admin users can check for updates and trigger an update from the
-                admin panel. The server downloads the latest release, replaces
-                the binary, and restarts automatically.
-              </p>
             </Section>
 
             {/* ------------------------------------------------------------ */}
@@ -1003,7 +1101,16 @@ nssm restart OpenPanel`}</Pre>
                           'Reset user password (admin)',
                         ],
                         ['POST', '/api/admin/backup', 'Create backup'],
-                        ['POST', '/api/admin/update', 'Trigger server update'],
+                        [
+                          'GET',
+                          '/api/admin/check-update',
+                          'Check for available updates',
+                        ],
+                        [
+                          'POST',
+                          '/api/admin/self-update',
+                          'Download and apply update',
+                        ],
                       ] as const
                     ).map(([method, path, desc]) => (
                       <tr key={path}>
